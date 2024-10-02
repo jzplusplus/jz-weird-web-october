@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Nature - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://weirdweboctober.website/" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Nature" >
+
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .background {
+                position: relative;
+                width: 100vw;
+                flex-grow: 1;
+            }
+
+            #sky-background {
+                background-color: skyblue;
+                flex-grow: 1.5;
+            }
+            
+            #ground-background {
+                background-color: green;
+            }
+            
+            #water-background {
+                background-color: darkblue;
+            }
+
+            .sprite {
+                position: absolute;
+                font-size: 5vh;
+
+                transition: top 0.5s, left 0.5s, transform 0.5s;
+            }
+
+            .sprite.left {
+                scale: 100% 100%;
+            }
+            .sprite.right {
+                scale: -100% 100%;
+            }
+            
+            .ladybug {
+                rotate: 90deg;
+            }
+            .ladybug.left {
+                scale: 100% -100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="sky-background" class="background">
+            <!-- <div class="sprite left dove">🕊️</div> -->
+        </div>
+        <div id="ground-background" class="background">
+            <!-- <div class="sprite left ladybug">🐞</div> -->
+        </div>
+        <div id="water-background" class="background">
+            <!-- <div class="sprite left octopus">🐙</div> -->
+        </div>
+
+        <script>
+            let sky = {
+                "dove": "🕊️",
+                "eagle": "🦅",
+                "chick": "🐤"
+            };
+
+            let ground = {
+                "ladybug": "🐞",
+                "deer": "🦌",
+                "kangaroo": "🦘"
+
+            };
+
+            let water = {
+                "fish": "🐟",
+                "clownfish": "🐠",
+                "octopus": "🐙"
+
+            };
+
+            function randBetween(min,max) {
+                return Math.floor(Math.random() * (max - min)) + min;
+            }
+            function tick() {
+                let sprites = document.getElementsByClassName("sprite");
+                for(elem of sprites)
+                {
+                    if(Math.random() > 0.7)
+                    {
+                        let left = elem.style.left;
+                        let top = elem.style.top;
+                        if(left == "") left = "-10vw";
+                        if(top == "") top = "50%";
+
+                        let x = parseInt(left);
+                        if(elem.classList.contains("right")) x += randBetween(5, 15);
+                        else x -= randBetween(1, 5);
+                        elem.style.left = x + "vw";
+                        
+                        let y = parseInt(top);
+                        y += randBetween(-10, 10);
+                        elem.style.top = y + "%";
+
+                        if(x > 110 || x < -10) elem.remove();
+                    }
+                }
+
+                if(Math.random() > 0.85)
+                {
+                    let right = (Math.random() > 0.5);
+                    let choices;
+                    let parent;
+
+                    let r = Math.random();
+                    if(r < 0.165)
+                    {
+                        choices = sky;
+                        parent = document.getElementById("sky-background");
+                    }
+                    else if(r < 0.5775)
+                    {
+                        choices = ground;
+                        parent = document.getElementById("ground-background");
+                    }
+                    else if(r < 0.99)
+                    {
+                        choices = water;
+                        parent = document.getElementById("water-background");
+                    }
+                    else
+                    {
+                        choices = water;
+                        parent = document.getElementById("sky-background");
+                    }
+
+                    let newelem = document.createElement("div");
+                    newelem.classList.add("sprite");
+                    if(right)
+                    {
+                        newelem.classList.add("right");
+                        newelem.style.left = "-9vw";
+                    }
+                    else
+                    {
+                        newelem.classList.add("left");
+                        newelem.style.left = "109vw";
+                    }
+
+                    let keys = Object.keys(choices)
+                    let pick = keys[randBetween(0, keys.length)];
+
+                    newelem.classList.add(pick);
+                    newelem.textContent = choices[pick];
+
+                    parent.appendChild(newelem);
+                }
+            }
+
+            setInterval(tick, 100);
+        </script>
+    </body>
+</html>
