@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+    <head>
+        <title>BYOC - Color - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/3-color.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Color" >
+
+        <style>
+            body {
+                margin: 0;
+                font-family: sans-serif;
+            }
+
+            #intro::backdrop {
+                background-color: #333;
+            }
+
+            #video {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                height: 15vh;
+                z-index: 99;
+
+                border: 5vh solid blue;
+                transform: scaleX(-1) translate(50%);
+            }
+
+            #overlay {
+                position: absolute;
+                top: 12.5vh;
+                left: 50%;
+                height: 10px;
+                width: 10px;
+                z-index: 100;
+
+                border: 2px solid white;
+                outline: 1px solid black;
+                border-radius: 100%;
+                transform: translate(-50%, -50%);
+            }
+
+            #capture {
+                display: none;
+            }
+
+            #canvas, #mouse {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+
+                cursor: none;
+            }
+
+            #mouse {
+                z-index: 1;
+            }
+
+            #buttons {
+                position: absolute;
+                bottom: 5vh;
+                width: 100vw;
+                text-align: center;
+
+                z-index: 2;
+            }
+        </style>
+    </head>
+
+    <body>
+        <dialog id="intro">
+            <h1>Bring Your Own Color</h1>
+            <p>This site uses your webcam to select colors to draw with. Your browser will ask for permission to use the video feed. Click anywhere on the page to begin.</p>
+        </dialog>
+
+        <video id="video">Video stream not available</video>
+        <div id="overlay"></div>
+        <canvas id="capture"></canvas>
+        <canvas id="mouse"></canvas>
+        <canvas id="canvas"></canvas>
+
+        <div id="buttons">
+            <button id="copy">Copy drawing to clipboard</button>
+            <button id="clear">CLEAR</button>
+        </div>
+
+        <script>
+            let intro = document.getElementById("intro");
+            let video = document.getElementById("video");
+            let capture = document.getElementById("capture");
+            let mouse = document.getElementById("mouse");
+            let mousecontext = mouse.getContext("2d");
+            let canvas = document.getElementById("canvas");
+            let canvascontext = canvas.getContext("2d");
+            let streaming = false;
+            let color = "rgb(255, 255, 255)";
+
+            window.addEventListener("load", function() {
+                navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                }).catch(function(err) {
+                    console.error(err);
+                });
+
+                canvascontext.fillStyle = "white";
+                canvascontext.fillRect(0, 0, canvas.width, canvas.height);
+            });
+
+            video.addEventListener("canplay", function(event) {
+                streaming = true;
+                capture.width = video.videoWidth;
+                capture.height = video.videoHeight;
+            });
+
+            let mousex = 0;
+            let mousey = 0;
+            function updateMouse(event) {
+                // console.log(event);
+                if(event != null)
+                {
+                    mousex = event.clientX;
+                    mousey = event.clientY;
+                }
+
+                mousecontext.clearRect(0, 0, mouse.width, mouse.height);
+                mousecontext.beginPath();
+                mousecontext.fillStyle = color;
+                mousecontext.arc(mousex, mousey, 10, 0, 2*Math.PI, false);
+                mousecontext.fill();
+
+                if(event != null && event.buttons == 1)
+                {
+                    canvascontext.beginPath();
+                    canvascontext.fillStyle = color;
+                    canvascontext.arc(mousex, mousey, 10, 0, 2*Math.PI, false);
+                    canvascontext.fill();
+                }
+            }
+
+            setInterval(function() {
+                if(!streaming) return;
+
+                let context = capture.getContext("2d");
+                context.drawImage(video, 0,0, capture.width, capture.height);
+                let imagedata = context.getImageData(capture.width/2, capture.height/2, 1, 1);
+                color = "rgb(" + imagedata.data[0] + ", " + imagedata.data[1] + ", " + imagedata.data[2] + ")";
+                video.style.borderColor = color;
+                updateMouse(null);
+            }, 100);
+
+            function onresize() {
+                mouse.width = window.innerWidth;
+                mouse.height = window.innerHeight;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener("resize", onresize);
+            onresize();
+
+            mouse.addEventListener("mousedown", updateMouse);
+            mouse.addEventListener("mousemove", updateMouse);
+
+            document.getElementById("copy").addEventListener("click", function() {
+                canvas.toBlob(function(blob) {
+                    const item = new ClipboardItem({"image/png": blob});
+                    navigator.clipboard.write([item]);
+                });
+            });
+            
+            document.getElementById("clear").addEventListener("click", function() {
+                canvascontext.fillStyle = "white";
+                canvascontext.fillRect(0, 0, canvas.width, canvas.height);
+            });
+
+            intro.addEventListener("click", intro.close);
+            intro.showModal();
+        </script>
+    </body>
+</html>
