@@ -11,6 +11,8 @@
             body {
                 margin: 0;
                 font-family: sans-serif;
+                overflow: hidden;
+                position: fixed;
             }
 
             #intro::backdrop {
@@ -77,7 +79,7 @@
             <p>This site uses your webcam to select colors to draw with. Your browser will ask for permission to use the video feed. Click anywhere on the page to begin.</p>
         </dialog>
 
-        <video id="video">Video stream not available</video>
+        <video id="video" muted playsinline >Video stream not available</video>
         <div id="overlay"></div>
         <canvas id="capture"></canvas>
         <canvas id="mouse"></canvas>
@@ -165,6 +167,8 @@
 
             mouse.addEventListener("mousedown", updateMouse);
             mouse.addEventListener("mousemove", updateMouse);
+            mouse.addEventListener("touchstart", updateMouse);
+            mouse.addEventListener("touchmove", updateMouse);
 
             document.getElementById("copy").addEventListener("click", function() {
                 canvas.toBlob(function(blob) {
