@@ -1,0 +1,104 @@
+<title>CSS - Weird Web October</title>
+<meta name="author" content="Jay Zuerndorfer" />
+<link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/2-css.html" >
+<link rel="octo:octothorpes" href="weirdweboctober" >
+<link rel="octo:octothorpes" href="CSS" >
+
+<style>
+    html {
+        padding: 10px;
+        border-radius: 5px;
+        background: #fff;
+        font-family: sans-serif;
+    }
+
+    html::before {
+        content: "CSS only webpage";
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #99f;
+        font-weight: 800;
+        font-size: larger;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        margin-bottom: 25px;
+    }
+
+    head {
+        display: block;
+        position: absolute;
+        top: 10vh;
+        left: 5vw;
+    }
+
+    head::before {
+        content: "Check the source code, this was made using only CSS (with a few exceptions for a title, author, and a tag for Octothorpes). There's no body tag at all.";
+        display: block;
+        background: #9f9;
+        border-radius: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 15vh;
+        width: 25vw;
+        margin-bottom: 1vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    style {
+        display: block;
+        width: 50vw;
+        white-space: pre;
+    }
+
+    style::before {
+        content: "Browsers don't like a page without any elements, so they helpfully make a few for you if they're missing. They will give you an HTML tag, a head, and a body. ";
+        white-space: wrap;
+        display: block;
+        background: #9f9;
+        border-radius: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 15vh;
+        width: 25vw;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 15vw;
+        margin-bottom: 30vh;
+    }
+
+    body {
+        position: absolute;
+        top: 41vh;
+        left: 30vw;
+    }
+
+    body::before {
+        content: "The CSS pseudo-elements ::before and ::after can be assigned text and then styled just like a real element.";
+        display: block;
+        background: #9f9;
+        padding: 10px;
+        border-radius: 5px;
+        width: 25vw;
+        margin-bottom: 10px;
+    }
+
+    body::after {
+        content: "The CSS itself is visible below.";
+        display: block;
+        white-space: wrap;
+        background: #9f9;
+        padding: 10px;
+        border-radius: 5px;
+        width: 30vw;
+        margin-left: 15vw;
+        margin-bottom: 10px;
+    }
+
+    
+</style>
