@@ -21,6 +21,14 @@
                 background-color: #f77;
             }
 
+            #warning {
+                position: absolute;
+                top: 10vh;
+                left: 50vw;
+                transform: translate(-50%, -50%);
+
+            }
+
             #begin {
                 position: absolute;
                 top: 50vh;
@@ -67,6 +75,7 @@
     </head>
 
     <body>
+        <div id="warning">does not work on smartphones, unfortunately :(</div>
         <svg id="outline" viewbox="0 0 82 82">
             <rect x=1 y=1 width=80 height=80 rx="15" fill="none" stroke="black" stroke-width="2" stroke-dasharray="4 1 2 1 2 4 2 1 2 4 4 1 4 1 2 4 2 1 2 4 4 4 2 1 2 1 2 4 4 1 4 1 4 4 2 1 2 1 4 1 2 4 2 1 4 1 4 1 2 4 2 1 2 16" />
         </svg>
@@ -93,7 +102,6 @@
             window.onbeforeunload = cleanup;
 
             hashCode = s => s.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-            console.log(hashCode("123"));
 
             function handler(event) {
                 console.log(event.target.title);
