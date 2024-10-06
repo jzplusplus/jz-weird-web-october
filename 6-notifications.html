@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Notifications - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/6-notifications.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Notifications" >
+
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+
+            body.solved {
+                background-color: #7f7;
+            }
+
+            body.wrong {
+                background-color: #f77;
+            }
+
+            #begin {
+                position: absolute;
+                top: 50vh;
+                left: 50vw;
+                transform: translate(-50%, -50%);
+
+                font-size: larger;
+                height: 30vh;
+                width: 30vh;
+                border-radius: 18%;
+            }
+
+            #outline {
+                position: absolute;
+                top: 50vh;
+                left: 50vw;
+                transform: translate(-50%, -50%);
+
+                height: 40vh;
+                width: 40vh;
+            }
+
+            #combo {
+                position: absolute;
+                top: 75vh;
+                height: 20vh;
+                left: 0;
+                width: 100vw;
+
+                text-align: center;
+                font-family: monospace;
+                line-height: 20vh;
+                font-size: 20vh;
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+            }
+
+            span {
+                border-bottom: solid 1px black;
+            }
+        </style>
+    </head>
+
+    <body>
+        <svg id="outline" viewbox="0 0 82 82">
+            <rect x=1 y=1 width=80 height=80 rx="15" fill="none" stroke="black" stroke-width="2" stroke-dasharray="4 1 2 1 2 4 2 1 2 4 4 1 4 1 2 4 2 1 2 4 4 4 2 1 2 1 2 4 4 1 4 1 4 4 2 1 2 1 4 1 2 4 2 1 4 1 4 1 2 4 2 1 2 16" />
+        </svg>
+        <button id="begin">Click to begin</button>
+
+        <div id="combo">
+            <span>&nbsp</span>
+            <span>&nbsp</span>
+            <span>&nbsp</span>
+        </div>
+
+        <script>
+            let begin = document.getElementById("begin");
+            let notifs = [];
+            let combo = "";
+            function cleanup() {
+                for(n of notifs) {
+                    n.close();
+                }
+                notifs = [];
+                console.log("cleanup");
+            }
+
+            window.onbeforeunload = cleanup;
+
+            hashCode = s => s.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+            console.log(hashCode("123"));
+
+            function handler(event) {
+                console.log(event.target.title);
+                cleanup();
+
+                let elems = document.getElementsByTagName("span");
+                elems[combo.length].textContent = event.target.title;
+                combo += event.target.title;
+
+                if(combo.length < 3)
+                {
+                    setTimeout(makedigits, 1000);
+                }
+                else if(hashCode(combo) == 50582)
+                {
+                    document.body.classList.add("solved");
+                    begin.textContent = "solved!";
+                }
+                else
+                {
+                    document.body.classList.add("wrong");
+                    begin.textContent = "wrong";
+                }
+            }
+
+            function makedigits() {
+                for(let i = 0; i < 10; i++)
+                {
+                    const notif = new Notification(i.toString(), {requireInteraction: true});
+                    notif.addEventListener("click", handler);
+                    notifs.push(notif);
+                }
+            }
+
+            begin.addEventListener("click", function(event) {
+                Notification.requestPermission().then(function(result) {
+                    if(result == "denied")
+                    {
+                        begin.textContent = "notification permissions granted";
+                        return;
+                    }
+
+                    begin.textContent = "notification permissions granted";
+                    makedigits();
+                });
+            });
+        </script>
+    </body>
+</html>
