@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Science - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/7-science.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Science" >
+
+        <style>
+            body {
+                margin: 0 5vw;
+                font-family: sans-serif;
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            #selector {
+                width: 50%;
+                text-align: center;
+            }
+
+            #container {
+                width: 100vw;
+                height: 90vh;
+                padding-top: 5vh;
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #container div {
+                width: 50%;
+                border: 0px solid black;
+                box-sizing: border-box;
+                border-radius: 5px;
+                height: 0;
+                font-size: 0;
+                transition: height 3s, font-size 3s;
+
+                background: lightgray;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+
+            #container div:hover::before {
+                content: "";
+                display: block;
+                position: absolute;
+                left: calc(100% - 10px);
+                height: 0;
+                width: 0;
+
+                border-right: 10px solid lightgreen;
+                border-top: 10px solid transparent;
+                border-left: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+            }
+
+            #container div:hover::after {
+                content: attr(id);
+                display: block;
+                position: absolute;
+                left: calc(100% + 10px);
+
+                font-size: 30px;
+                padding: 10px;
+                background: lightgreen;
+                border-radius: 10px;
+
+            }
+
+            #container.wait div {
+                height: 0 !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        <select id="selector">
+            <option>Human Body</option>
+            <option selected="selected">Earth</option>
+            <option>Sun</option>
+            <option>Milky Way Galaxy</option>
+        </select>
+        <div id="container">
+            <div id="Hydrogen">Hydrogen</div>
+            <div id="Helium">Helium</div>
+            <div id="Lithium">Lithium</div>
+            <div id="Beryllium">Beryllium</div>
+            <div id="Boron">Boron</div>
+            <div id="Carbon">Carbon</div>
+            <div id="Nitrogen">Nitrogen</div>
+            <div id="Oxygen">Oxygen</div>
+            <div id="Fluorine">Fluorine</div>
+            <div id="Neon">Neon</div>
+            <div id="Sodium">Sodium</div>
+            <div id="Magnesium">Magnesium</div>
+            <div id="Aluminium">Aluminium</div>
+            <div id="Silicon">Silicon</div>
+            <div id="Phosphorus">Phosphorus</div>
+            <div id="Sulfur">Sulfur</div>
+            <div id="Chlorine">Chlorine</div>
+            <div id="Argon">Argon</div>
+            <div id="Potassium">Potassium</div>
+            <div id="Calcium">Calcium</div>
+            <div id="Scandium">Scandium</div>
+            <div id="Titanium">Titanium</div>
+            <div id="Vanadium">Vanadium</div>
+            <div id="Chromium">Chromium</div>
+            <div id="Manganese">Manganese</div>
+            <div id="Iron">Iron</div>
+            <div id="Cobalt">Cobalt</div>
+            <div id="Nickel">Nickel</div>
+            <div id="Copper">Copper</div>
+            <div id="Zinc">Zinc</div>
+            <div id="Gallium">Gallium</div>
+            <div id="Germanium">Germanium</div>
+            <div id="Arsenic">Arsenic</div>
+            <div id="Aluminum">Aluminum</div>
+        </div>
+        <script>
+            let data = {
+                "Human Body": {
+                    "Oxygen": 65,
+                    "Carbon": 18,
+                    "Hydrogen": 10,
+                    "Nitrogen": 3,
+                    "Calcium": 1.5,
+                    "Phosphorus": 1.2,
+                    "Potassium": 0.2,
+                },
+
+                "Earth": {
+                    "Iron": 32.1,
+                    "Oxygen": 30.1,
+                    "Silicon": 15.1,
+                    "Magnesium": 13.9,
+                    "Sulfur": 2.9,
+                    "Nickel": 1.8,
+                    "Calcium": 1.5,
+                    "Aluminum": 1.4,
+                },
+
+                "Sun": {
+                    "Hydrogen": 73.4,
+                    "Helium": 25.0,
+                    "Oxygen": 0.8,
+                    "Carbon": 0.3,
+                    "Nitrogen": 0.1,
+                    "Neon": 0.1
+                },
+
+                "Milky Way Galaxy": {
+                    "Hydrogen": 73.9,
+                    "Helium": 24.0,
+                    "Oxygen": 1.0,
+                    "Carbon": 0.5,
+                    "Neon": 0.1,
+                    "Iron": 0.1,
+                },
+            };
+
+            function populate(selection) {
+                let container = document.getElementById("container");
+                container.classList.add("wait");
+                for(elem of document.querySelectorAll("#container div")) {
+                    if(elem.id in data[selection]) {
+                        elem.style.height = data[selection][elem.id] + "%";
+                        elem.style.fontSize = data[selection][elem.id] + "px";
+                        elem.style.border = "1px solid black";
+                    }
+                    else {
+                        elem.style.height = 0;
+                        elem.style.fontSize = 0;
+                        elem.style.border = 0;
+                    }
+                }
+                setTimeout(function() {container.classList.remove("wait");}, 100);
+            }
+
+            let selector = document.getElementById("selector");
+            selector.addEventListener("change", function() {
+                populate(selector.value);
+            });
+
+            selector.value = "Earth";
+            populate("Earth");
+        </script>
+    </body>
+</html>
