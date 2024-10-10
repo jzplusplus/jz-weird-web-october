@@ -79,7 +79,7 @@
         <div id="ori">ORI</div>
         <script>
             window.addEventListener("load", function() {
-                setInterval(function() {
+                function makeimg() {
                     let elem = document.createElement("img");
                     elem.src = urls[Math.floor(Math.random() * urls.length)];
                     elem.classList.add("photo");
@@ -97,7 +97,9 @@
                     })
 
                     document.body.appendChild(elem);
-                }, 2500);
+                }
+                makeimg();
+                setInterval(makeimg, 2500);
             });
         </script>
 
