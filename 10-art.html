@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Art - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/10-art.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Art" >
+
+        <style>
+            body {
+                margin: 0;
+                font-family: sans-serif;
+            }
+
+            h1 {
+                text-align: center;
+                margin-bottom: 5vh;
+            }
+
+            #container {
+                width: 90vw;
+                height: 80vh;
+                margin-left: 5vw;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            #main {
+                height: 50%;
+                padding: 20px;
+                border-radius: 20px;
+                background: lightgrey;
+                cursor: grab;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+                transition: transform 0.25s;
+            }
+
+            #main.art {
+                transform: translate(-17vw, 42vh) scale(0);
+            }
+            #main.trash {
+                transform: translate(17vw, 42vh) scale(0);
+            }
+
+            #image {
+                max-width: 100%;
+                max-height: 90%;
+            }
+
+            #image[src=""] {
+                display: none;
+            }
+
+            #description {
+                font-size: 25px;
+            }
+
+            #targets {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+            }
+
+            #art, #trash {
+                position: relative;
+                font-size: 10vh;
+                padding: 20px;
+                border: 2px dotted black;
+                border-radius: 20px;
+            }
+
+            #art-num, #trash-num {
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: translate(-50%, -50%);
+
+                border-radius: 100%;
+                background: red;
+                font-weight: 600;
+                font-size: 3vh;
+                line-height: 5vh;
+                height: 5vh;
+                width: 5vh;
+                text-align: center;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Is this art or can I throw it away?</h1>
+
+        <div id="container">
+            <div id="main" draggable="true">
+                <img id="image" src="" />
+                <div id="description"></div>
+            </div>
+
+            <div id="targets">
+                <div id="art">🎨<div id="art-num">0</div></div>
+                <div id="trash">🗑️<div id="trash-num">0</div></div>
+            </div>
+        </div>
+        <script>
+            let items = [
+                {"title": "the Mona Lisa", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg"},
+                {"title": "banana", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Banana_duct_taped_to_fridge_as_a_reminder_to_eat_less_meat.jpg/629px-Banana_duct_taped_to_fridge_as_a_reminder_to_eat_less_meat.jpg?20191224123018"},
+                {"title": "people looking at the Mona Lisa", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Visitors_of_the_Louvre_taking_photographs_of_Mona_Lisa_%281325512_1920%29.jpg/640px-Visitors_of_the_Louvre_taking_photographs_of_Mona_Lisa_%281325512_1920%29.jpg"},
+                {"title": "toilet", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Duchamp_Fountain_%2828365079%29.jpg/640px-Duchamp_Fountain_%2828365079%29.jpg"},
+                {"title": "Hawaiian pizza", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Hawaiian_pizza_1.jpg/640px-Hawaiian_pizza_1.jpg"},
+                {"title": "the first result on Wikimedia when you search for art", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Great_Wave_off_Kanagawa2.jpg/640px-Great_Wave_off_Kanagawa2.jpg"},
+                {"title": "naked guy", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_right_view_2.jpg/640px-Michelangelo%27s_David_-_right_view_2.jpg"},
+                {"title": "naked burning guy", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Burning_man_burning.jpg/640px-Burning_man_burning.jpg"},
+                {"title": "Earth", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/640px-The_Earth_seen_from_Apollo_17.jpg"},
+                {"title": "money", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/United_States_one_dollar_bill%2C_obverse.jpg/640px-United_States_one_dollar_bill%2C_obverse.jpg"},
+                {"title": "this website", "img": "/10-art-screenshot.png"},
+                {"title": "loss", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Minimalist_loss.svg/640px-Minimalist_loss.svg.png"},
+                {"title": "video games", "img": "https://upload.wikimedia.org/wikipedia/en/2/22/Death_Stranding.jpg?20191028064222"},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "how long are you gonna keep going?", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "END", "img": ""},
+                {"title": "this one is actually the end", "img": ""},
+                {"title": "alright, one more image because you made it this far", "img": ""},
+                {"title": "<a href='rotatingsandwiches.com'>rotatingsandwiches.com</a>", "img": "https://i0.wp.com/rotatingsandwiches.com/wp-content/uploads/2023/04/neapolitan-ice-cream-sandwich.gif?resize=480%2C270&ssl=1"},
+                {"title": "bye :)", "img": ""},
+            ]
+
+            window.addEventListener("load", function() {
+                let main = document.getElementById("main");
+                let img = document.getElementById("image");
+                let description = document.getElementById("description");
+                let art = document.getElementById("art");
+                let trash = document.getElementById("trash");
+                let index = 0;
+
+                function next() {
+                    if(index == items.length) index--;
+                    img.src = items[index]["img"];
+                    description.innerHTML = items[index]["title"];
+                    index++;
+                }
+                next();
+
+                function ondragover(event) {
+                    event.preventDefault();
+                }
+
+                function ondrop(event) {
+                    event.preventDefault();
+                    console.log(event);
+
+                    main.classList.add(event.target.id);
+                }
+                art.addEventListener("dragover", ondragover);
+                trash.addEventListener("dragover", ondragover);
+                art.addEventListener("drop", ondrop);
+                trash.addEventListener("drop", ondrop);
+
+                function reset() {
+                    main.style.transform = "";
+                    setTimeout(function() { main.style.transition = ""}, 100);
+                }
+
+                main.addEventListener("transitionend", function(event) {
+                    let which = main.classList.item(0);
+                    let num = document.getElementById(which+"-num")
+                    num.textContent = parseInt(num.textContent) + 1;
+                    main.classList.remove(which);
+                    main.style.transition = "none";
+                    next();
+                    if(img.src == window.location.href) reset();
+                });
+
+                
+                img.addEventListener("load", reset);
+            });
+        </script>
+        
+    </body>
+</html>
