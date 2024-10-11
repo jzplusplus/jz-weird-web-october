@@ -11,6 +11,8 @@
             body {
                 margin: 0;
                 font-family: sans-serif;
+                overflow: hidden;
+                position: relative;
             }
 
             h1 {
@@ -35,6 +37,7 @@
                 border-radius: 20px;
                 background: lightgrey;
                 cursor: grab;
+                position: relative;
 
                 display: flex;
                 flex-direction: column;
@@ -163,6 +166,29 @@
                 let trash = document.getElementById("trash");
                 let index = 0;
 
+                let startx = 0;
+                let starty = 0;
+                main.addEventListener("touchstart", function(event) {
+                    startx = event.changedTouches[0].clientX;
+                    starty = event.changedTouches[0].clientY;
+                });
+                main.addEventListener("touchmove", function(event) {
+                    main.style.left = (event.changedTouches[0].clientX - startx) + "px";
+                    main.style.top = (event.changedTouches[0].clientY - starty) + "px";
+                });
+                main.addEventListener("touchend", function(event) {
+                    main.style.left = "0px";
+                    main.style.top = "0px";
+
+                    let target = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY).id;
+                    if(target == "art" || target == "trash") {
+                        main.classList.add(target);
+                    }
+                });
+                document.body.addEventListener("mouseup", function(event) {
+                    console.log(document.elementFromPoint(event.clientX, event.clientY));
+                });
+
                 function next() {
                     if(index == items.length) index--;
                     img.src = items[index]["img"];
@@ -177,8 +203,6 @@
 
                 function ondrop(event) {
                     event.preventDefault();
-                    console.log(event);
-
                     main.classList.add(event.target.id);
                 }
                 art.addEventListener("dragover", ondragover);
