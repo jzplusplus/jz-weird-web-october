@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        <title>API - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/11-api.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="API" >
+
+        <style>
+            body {
+                background: black;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>random Weird Web October site loading...</h1>
+        <script>
+            var xhr = new XMLHttpRequest();
+            xhr.overrideMimeType("application/json");  
+            xhr.responseType = "json";
+
+            xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                let data = this.response["thorpes"];
+                console.log(data.length);
+
+                let pick = data[Math.floor(Math.random() * data.length)];
+                console.log(pick);
+                window.location.href = pick["uri"];
+            }
+            });
+
+            xhr.open("GET", "https://octothorp.es/~/weirdweboctober");
+            xhr.send();
+        </script>
+        
+    </body>
+</html>
