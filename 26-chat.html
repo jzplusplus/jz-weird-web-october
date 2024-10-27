@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Chat - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/26-chat.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Chat" >
+
+        <style>
+            body {
+                font-family: sans-serif;
+                width: 100vw;
+                margin: 0;
+                padding-top: 5vh;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: start;
+            }
+
+            .bubble{
+                padding: 1vw;
+                margin-bottom: 1vw;
+                font-size: 20px;
+
+                border-radius: 20px;
+            }
+
+            .bubble.left {
+                margin-left: 5vw;
+                align-self: flex-start;
+                background: #ddd;
+            }
+            .bubble.right {
+                margin-right: 5vw;
+                align-self: flex-end;
+                background: #147efb;
+            }
+
+            input {
+                position: absolute;
+                bottom: 5vh;
+                left: 5vw;
+                right: 5vw;
+                padding: 5px 25px;
+
+                border-radius: 50px;
+                font-size: 40px;
+                line-height: 50px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="bubble left">Hello!</div>
+
+        <input id="input" type="text" placeholder="Type your message" />
+
+        <script>
+            let input = document.getElementById("input");
+            input.addEventListener("change", function(event) {
+                let newbubble = document.createElement("div");
+                newbubble.textContent = input.value;
+                newbubble.classList.add("bubble");
+                newbubble.classList.add("right");
+                document.body.appendChild(newbubble);
+                input.value = "";
+
+                setTimeout(function() {
+                    let reply = document.createElement("div");
+                    reply.id = "dotdotdot";
+                    reply.textContent = ".";
+                    reply.classList.add("bubble");
+                    reply.classList.add("left");
+                    document.body.appendChild(reply);
+                }, 500);
+                setTimeout(function() {
+                    let reply = document.getElementById("dotdotdot");
+                    reply.textContent = "..";
+                }, 1000);
+                setTimeout(function() {
+                    let reply = document.getElementById("dotdotdot");
+                    reply.textContent = "...";
+                }, 1500);
+                setTimeout(function() {
+                    let reply = document.getElementById("dotdotdot");
+                    reply.textContent = "That's so interesting!";
+                }, 2500);
+            });
+        </script>
+        
+    </body>
+</html>
