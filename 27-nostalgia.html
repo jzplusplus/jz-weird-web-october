@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Nostalgia - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/27-nostalgia.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Nostalgia" >
+
+        <style>
+            body {
+                font-family: sans-serif;
+
+                margin: 0;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+                background: #fff;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #container {
+                display: inline-block;
+                height: 100%;
+            }
+
+            img {
+                object-fit: contain;
+                max-height: 100%;
+                max-width: 100%;
+                padding-top: 40vh;
+                pointer-events: none;
+            }
+
+            .speck {
+                position: absolute;
+                left: 10%;
+                top: 50%;
+
+                background: #000;
+                height: 8px;
+                width: 50px;
+
+                transform-origin: 50% 50%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <img src="27-nostalgia-james.jpg" />
+        <div>
+            <div class="speck" id="0"></div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let num = 1000;
+                let attraction = 200;
+                let maxcutoff = 10000;
+                let mincutoff = 200;
+                let specks = [];
+                let width = document.body.clientWidth;
+                let height = document.body.clientHeight;
+                let mousex = 0;
+                let mousey = 0;
+                let timer;
+
+                let zero = document.getElementById("0");
+                specks.push([0,0,0,1]);
+                zero.style.left = "0px";
+                zero.style.top = "0px";
+                zero.style.rotate = "0rad";
+
+                for(let i = 1; i < num; i++) {
+                    let s = zero.cloneNode();
+                    let xyrs = [((Math.random()-0.5) * width/2) + width/2, ((Math.random()-0.5) * height/2) + height/2, (Math.random() * Math.PI), (Math.random() * 0.5) + 0.5]
+                    s.id = i;
+                    s.style.left =  xyrs[0] + "px";
+                    s.style.top = xyrs[1] + "px";
+                    s.style.rotate = xyrs[2] + "rad";
+                    specks.push(xyrs);
+                    document.body.appendChild(s);
+                }
+
+                function update() {
+                    for(let i = 0; i < num; i++) {
+                        let xdiff = (specks[i][0] - mousex);
+                        let ydiff = (specks[i][1] - mousey);
+                        let dist2 = xdiff**2 + ydiff**2;
+
+                        if(dist2 < maxcutoff) {
+                            let s = document.getElementById(i);
+                            if(dist2 > mincutoff) {
+                                specks[i][0] -= ((attraction/dist2) * xdiff * specks[i][3]);
+                                specks[i][1] -= ((attraction/dist2) * ydiff * specks[i][3]);
+                                specks[i][2] = (Math.atan2(ydiff, xdiff) + specks[i][2])/2;
+                            }
+                            else
+                            {
+                                // specks[i][2] = Math.random() * Math.PI;
+                                specks[i][2] += (Math.random()-0.5) / 4;
+                            }
+
+                            s.style.left =  specks[i][0] + "px";
+                            s.style.top = specks[i][1] + "px";
+                            s.style.rotate = specks[i][2] + "rad";
+                        }
+                    }
+                }
+
+                document.body.addEventListener("mousemove", function(event) {
+                    mousex = event.clientX;
+                    mousey = event.clientY;
+                    event.preventDefault()
+                });
+                document.body.addEventListener("mousedown", function() {
+                    timer = setInterval(update, 16);
+                    event.preventDefault()
+                });
+                document.body.addEventListener("mouseup", function() {
+                    clearInterval(timer);
+                    event.preventDefault()
+                });
+
+                document.body.addEventListener("touchmove", function(event) {
+                    mousex = event.touches[0].clientX;
+                    mousey = event.touches[0].clientY;
+                    event.preventDefault()
+                });
+                document.body.addEventListener("touchstart", function() {
+                    timer = setInterval(update, 16);
+                    event.preventDefault()
+                });
+                document.body.addEventListener("touchend", function() {
+                    clearInterval(timer);
+                    event.preventDefault()
+                });
+                document.body.addEventListener("touchcancel", function() {
+                    clearInterval(timer);
+                    event.preventDefault()
+                });
+            });
+        </script>
+        
+    </body>
+</html>
