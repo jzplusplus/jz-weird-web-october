@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Transparency - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/2025/1-transparency.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Transparency" >
+
+        <style>
+            body {
+                margin: 10vmin;
+                overflow: hidden;
+            }
+            iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+            }
+            #glass {
+                position: absolute;
+                z-index: 99;
+                top: 0;
+                left: 0;
+                width: 200vmax;
+                height: 200vmax;
+                translate: -100vmax -100vmax;
+                background-color: rgb(0 0 0 / 40%);
+                backdrop-filter: blur(5px);
+                mask-image: radial-gradient(transparent 0%, black 5%);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="glass"></div>
+        <iframe src="https://en.wikipedia.org/wiki/Liquid_Glass" width="100%" height="100%"></iframe>
+
+        <script>
+            let glass = document.getElementById("glass");
+            document.addEventListener("mousemove", function(event) {
+                glass.style.left = event.clientX+ "px";
+                glass.style.top = event.clientY + "px";
+            });
+        </script>
+    </body>
+</html>
