@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Reveal - Weird Web October</title>
+        <meta name="author" content="Jay Zuerndorfer" />
+        <link rel="preload" as="fetch" href="https://octothorp.es/?uri=https://wwo.jzplusplus.com/2026/1-reveal.html" >
+        <link rel="octo:octothorpes" href="weirdweboctober" >
+        <link rel="octo:octothorpes" href="Reveal" >
+
+        <style>
+            body {
+                background: black;
+                color: white;
+                margin: 0;
+            }
+
+            .container {
+                display: grid;
+                width: 100vw;
+                /* height: 100vh; */
+                --columns: 19;
+                grid-template-columns: repeat(var(--columns), 1fr);
+            }
+
+            .box {
+                width: calc(100vw / var(--columns));
+                height: calc(100vw / var(--columns));
+                line-height: calc(100vw / var(--columns));
+                font-size: calc(100vw / var(--columns));
+                text-align: center;
+
+                transition: transform 0.7s linear, background-color 0.7s steps(2, jump-none);
+                transform: rotateY(180deg);
+            }
+
+            .box:nth-child(odd) {
+                color: #333;
+                background-color: #333;
+            }
+            .box:nth-child(even) {
+                color: #666;
+                background-color: #666;
+            }
+            
+            .box:hover {
+                transform: rotateY(0deg);
+                background-color: #34004d;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+        </div>
+        <script>
+            let message = "REVEAL";
+            let msgindex = 0;
+            let width = 19;
+            let height = 100;
+            let container = document.getElementsByClassName("container")[0];
+            for(let x=0; x < width*height; x++) {
+                let newelem = document.createElement("div");
+                newelem.classList.add("box");
+                newelem.textContent = ".";
+                if(Math.random() > 0.9) {
+                    newelem.textContent = message.charAt(msgindex);
+                    msgindex++;
+                    if(msgindex >= message.length) msgindex = 0;
+                }
+                container.appendChild(newelem);
+            }
+        </script>
+        
+    </body>
+</html>
